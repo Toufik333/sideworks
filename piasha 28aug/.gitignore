@@ -1,0 +1,66 @@
+# ============================================================================
+# Git Ignore — Sentence-BERT Reproduction (Apple Silicon M1)
+# ============================================================================
+
+# Virtual Environments
+sbert_env/
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+build/
+dist/
+eggs/
+*.egg-info/
+*.egg
+
+# External Cloned Repositories (avoid nested git tracking)
+sentence-transformers/
+
+# Model Checkpoints and Weights
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+checkpoints/
+models/
+
+# Dataset & HuggingFace Caches
+.cache/
+data/
+datasets/
+hf_cache/
+wandb/
+
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.spyderproject
+.spyproject
+
+# Logs and Task outputs
+*.log
+logs/
+.system_generated/
