@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Learn pure HTML interactively — hands-on lessons with live preview and CodePen practice.">
+  <title>Learn Pure HTML — Interactive Course</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    :root {
+      --bg-deep: #0a0a0f;
+      --bg-surface: #12121a;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-glass: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.08);
+      --border-active: rgba(139,92,246,0.5);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8b8b9e;
+      --text-muted: #55556a;
+      --accent: #8b5cf6;
+      --accent-glow: rgba(139,92,246,0.25);
+      --accent2: #06b6d4;
+      --accent3: #f59e0b;
+      --accent4: #10b981;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== BACKGROUND EFFECTS ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at 20% 50%, rgba(139,92,246,0.08) 0%, transparent 50%),
+                  radial-gradient(ellipse at 80% 20%, rgba(6,182,212,0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 80%, rgba(245,158,11,0.04) 0%, transparent 50%);
+      animation: bgShift 20s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgShift {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-3%, -3%) rotate(3deg); }
+    }
+
+    /* ===== HEADER ===== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,10,15,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .progress-bar-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .progress-track {
+      width: 180px;
+      height: 6px;
+      background: var(--bg-card);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+
+    /* ===== LAYOUT ===== */
+    .app-layout {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      min-height: calc(100vh - 64px);
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      border-right: 1px solid var(--border);
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .sidebar-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      padding: 0 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .lesson-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .lesson-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      border-left: 3px solid transparent;
+      position: relative;
+    }
+
+    .lesson-item:hover {
+      background: var(--bg-glass);
+      color: var(--text-primary);
+    }
+
+    .lesson-item.active {
+      background: rgba(139,92,246,0.08);
+      color: var(--text-primary);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .lesson-item.completed .lesson-num {
+      background: var(--success);
+      color: white;
+    }
+
+    .lesson-num {
+      width: 26px; height: 26px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .lesson-item.active .lesson-num {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      padding: 2.5rem 3rem;
+      overflow-y: auto;
+    }
+
+    .lesson-header {
+      margin-bottom: 2rem;
+    }
+
+    .lesson-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      background: rgba(139,92,246,0.1);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .lesson-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .lesson-desc {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 640px;
+    }
+
+    /* ===== CONTENT SECTIONS ===== */
+    .content-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .icon {
+      font-size: 1.1rem;
+    }
+
+    .theory-text {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      max-width: 700px;
+      margin-bottom: 1rem;
+    }
+
+    .theory-text strong { color: var(--text-primary); font-weight: 600; }
+    .theory-text code {
+      background: rgba(139,92,246,0.15);
+      color: var(--accent);
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em;
+    }
+
+    /* ===== TAG REFERENCE CARDS ===== */
+    .tag-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 1rem;
+    }
+
+    .tag-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      transition: var(--transition);
+    }
+
+    .tag-card:hover {
+      border-color: var(--border-active);
+      background: rgba(139,92,246,0.06);
+      transform: translateY(-2px);
+    }
+
+    .tag-card-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent2);
+      margin-bottom: 4px;
+    }
+
+    .tag-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== CODE EDITOR ===== */
+    .code-playground {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+
+    .playground-tabs {
+      display: flex;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .playground-tab {
+      padding: 10px 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 2px solid transparent;
+    }
+
+    .playground-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .playground-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 260px;
+    }
+
+    .code-editor-area {
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+
+    .code-editor-area textarea {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      padding: 1rem 1.25rem;
+      resize: none;
+      outline: none;
+      tab-size: 2;
+    }
+
+    .code-editor-area textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    .preview-pane {
+      background: #fff;
+      position: relative;
+    }
+
+    .preview-label {
+      position: absolute;
+      top: 8px; right: 12px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      z-index: 2;
+    }
+
+    .preview-pane iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      border: none;
+    }
+
+    /* ===== CHALLENGE BOX ===== */
+    .challenge-box {
+      background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02));
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .challenge-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent3);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .challenge-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .challenge-text ol, .challenge-text ul {
+      margin: 0.5rem 0 0.5rem 1.25rem;
+    }
+
+    .challenge-text li {
+      margin-bottom: 0.25rem;
+    }
+
+    .challenge-text code {
+      background: rgba(245,158,11,0.15);
+      color: var(--accent3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.84em;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: white;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: var(--bg-glass);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-active);
+      background: rgba(139,92,246,0.08);
+    }
+
+    .btn-codepen {
+      background: linear-gradient(135deg, #1e1f26, #2c2d35);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-codepen:hover {
+      background: linear-gradient(135deg, #2c2d35, #3c3d45);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #16a34a);
+      color: white;
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(34,197,94,0.3);
+    }
+
+    /* ===== NAVIGATION FOOTER ===== */
+    .lesson-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ===== TIP BOX ===== */
+    .tip-box {
+      background: rgba(6,182,212,0.06);
+      border: 1px solid rgba(6,182,212,0.15);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .tip-box strong {
+      color: var(--accent2);
+    }
+
+    /* ===== QUIZ ===== */
+    .quiz-container {
+      margin-top: 1.5rem;
+    }
+
+    .quiz-question {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.88rem;
+    }
+
+    .quiz-option:hover {
+      border-color: var(--border-active);
+      background: rgba(139,92,246,0.06);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--success);
+      background: rgba(34,197,94,0.08);
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--danger);
+      background: rgba(239,68,68,0.08);
+    }
+
+    .quiz-option .radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .quiz-option.correct .radio {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .quiz-option.wrong .radio {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+
+    .quiz-feedback.show { display: block; }
+
+    .quiz-feedback.correct-feedback {
+      background: rgba(34,197,94,0.1);
+      color: var(--success);
+      border: 1px solid rgba(34,197,94,0.2);
+    }
+
+    .quiz-feedback.wrong-feedback {
+      background: rgba(239,68,68,0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239,68,68,0.2);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 0;
+      }
+      .lesson-list {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 0 1rem;
+        gap: 4px;
+      }
+      .lesson-item {
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+      }
+      .lesson-item.active {
+        border-bottom-color: var(--accent);
+        border-left-color: transparent;
+      }
+      .main-content { padding: 1.5rem; }
+      .playground-body { grid-template-columns: 1fr; }
+      .code-editor-area { border-right: none; border-bottom: 1px solid var(--border); }
+      .lesson-title { font-size: 1.5rem; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lesson-view { animation: fadeInUp 0.4s ease; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .completing { animation: pulse 0.5s ease; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">&lt;/&gt;</div>
+        <span>Learn HTML</span>
+      </div>
+      <div class="progress-bar-container">
+        <span id="progressText">0 / 12 lessons</span>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- APP -->
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div class="sidebar-title">Lessons</div>
+      <ul class="lesson-list" id="lessonList"></ul>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main-content" id="mainContent">
+      <!-- Dynamically populated -->
+    </main>
+
+  </div>
+
+<script>
+// ============================================================
+// LESSON DATA
+// ============================================================
+const lessons = [
+  {
+    id: 1,
+    title: "Your First HTML Page",
+    desc: "Understand the skeleton of every web page — the doctype, html, head, and body tags.",
+    tags: [
+      { name: "&lt;!DOCTYPE html&gt;", desc: "Tells the browser this is HTML5" },
+      { name: "&lt;html&gt;", desc: "Root element of the page" },
+      { name: "&lt;head&gt;", desc: "Metadata container (not visible)" },
+      { name: "&lt;body&gt;", desc: "All visible content goes here" },
+      { name: "&lt;title&gt;", desc: "Sets the browser tab title" }
+    ],
+    theory: `Every HTML page starts with the same skeleton. <code>&lt;!DOCTYPE html&gt;</code> tells the browser you're using HTML5. The <code>&lt;html&gt;</code> tag wraps everything. Inside it, the <code>&lt;head&gt;</code> holds invisible metadata (like the page title), and the <code>&lt;body&gt;</code> holds everything the user actually sees.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head>
+  <title>My First Page</title>
+</head>
+<body>
+  <h1>Hello World!</h1>
+  <p>This is my very first web page.</p>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Change the <code>&lt;title&gt;</code> to your own name.</li>
+<li>Change the <code>&lt;h1&gt;</code> text to a greeting of your choice.</li>
+<li>Add a second <code>&lt;p&gt;</code> paragraph below the first one.</li>
+</ol>`,
+    quiz: {
+      question: "Which tag sets the text shown in the browser tab?",
+      options: ["&lt;h1&gt;", "&lt;title&gt;", "&lt;head&gt;", "&lt;body&gt;"],
+      correct: 1,
+      explanation: "The <code>&lt;title&gt;</code> tag inside <code>&lt;head&gt;</code> sets the browser tab text."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 2,
+    title: "Headings & Paragraphs",
+    desc: "Structure your content with six levels of headings and paragraph text.",
+    tags: [
+      { name: "&lt;h1&gt; – &lt;h6&gt;", desc: "Headings from largest to smallest" },
+      { name: "&lt;p&gt;", desc: "A paragraph of text" },
+      { name: "&lt;br&gt;", desc: "Line break (self-closing)" },
+      { name: "&lt;hr&gt;", desc: "Horizontal rule / divider" }
+    ],
+    theory: `HTML gives you <strong>six heading levels</strong>: <code>&lt;h1&gt;</code> is the most important (biggest), down to <code>&lt;h6&gt;</code>. Use only <strong>one <code>&lt;h1&gt;</code> per page</strong> — it's like the title of a book. Paragraphs use <code>&lt;p&gt;</code>. Use <code>&lt;br&gt;</code> for a line break inside text, and <code>&lt;hr&gt;</code> to add a horizontal divider.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Headings</title></head>
+<body>
+  <h1>Main Title</h1>
+  <p>This is an intro paragraph.</p>
+
+  <h2>Section One</h2>
+  <p>Details about section one.</p>
+
+  <h3>Sub-section</h3>
+  <p>More specific info here.</p>
+
+  <hr>
+
+  <h2>Section Two</h2>
+  <p>Another topic entirely.</p>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Create a page about your favorite hobby using <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, and <code>&lt;h3&gt;</code>.</li>
+<li>Write at least 3 paragraphs with <code>&lt;p&gt;</code>.</li>
+<li>Use an <code>&lt;hr&gt;</code> to separate two major sections.</li>
+</ol>`,
+    quiz: {
+      question: "How many &lt;h1&gt; tags should a page typically have?",
+      options: ["As many as you want", "Exactly one", "None", "Two"],
+      correct: 1,
+      explanation: "Best practice is one <code>&lt;h1&gt;</code> per page for accessibility and SEO."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 3,
+    title: "Text Formatting",
+    desc: "Make text bold, italic, underlined, highlighted, and more.",
+    tags: [
+      { name: "&lt;strong&gt;", desc: "Important / bold text" },
+      { name: "&lt;em&gt;", desc: "Emphasis / italic text" },
+      { name: "&lt;u&gt;", desc: "Underlined text" },
+      { name: "&lt;mark&gt;", desc: "Highlighted text" },
+      { name: "&lt;del&gt;", desc: "Strikethrough / deleted" },
+      { name: "&lt;small&gt;", desc: "Smaller text" },
+      { name: "&lt;sub&gt; / &lt;sup&gt;", desc: "Subscript / superscript" }
+    ],
+    theory: `Use <code>&lt;strong&gt;</code> for <strong>important text</strong> (renders bold) and <code>&lt;em&gt;</code> for <em>emphasis</em> (renders italic). Prefer these over <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> because they carry semantic meaning for screen readers. <code>&lt;mark&gt;</code> highlights text, <code>&lt;del&gt;</code> shows deleted content, and <code>&lt;sub&gt;</code>/<code>&lt;sup&gt;</code> handle subscripts and superscripts (like H₂O or E=mc²).`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Formatting</title></head>
+<body>
+  <h1>Text Formatting</h1>
+
+  <p>This is <strong>very important</strong> text.</p>
+  <p>This is <em>emphasized</em> text.</p>
+  <p>This is <u>underlined</u> text.</p>
+  <p>This is <mark>highlighted</mark> text.</p>
+  <p>This is <del>deleted</del> text.</p>
+  <p>This is <small>small</small> text.</p>
+  <p>H<sub>2</sub>O is water.</p>
+  <p>E = mc<sup>2</sup></p>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Write a paragraph using at least 4 different formatting tags.</li>
+<li>Write the chemical formula for Carbon Dioxide: CO₂ (hint: use <code>&lt;sub&gt;</code>).</li>
+<li>Show a price change: cross out the old price with <code>&lt;del&gt;</code> and show the new price.</li>
+</ol>`,
+    quiz: {
+      question: "Which is better for bold important text: &lt;b&gt; or &lt;strong&gt;?",
+      options: ["&lt;b&gt; — it's simpler", "&lt;strong&gt; — it has semantic meaning", "They're identical", "Neither — use CSS"],
+      correct: 1,
+      explanation: "<code>&lt;strong&gt;</code> tells browsers and screen readers the text is important, not just visually bold."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 4,
+    title: "Links & Navigation",
+    desc: "Connect pages together and link to the outside world with anchor tags.",
+    tags: [
+      { name: "&lt;a href&gt;", desc: "Hyperlink to another page" },
+      { name: "target=\"_blank\"", desc: "Open link in new tab" },
+      { name: "href=\"#id\"", desc: "Jump to a section on same page" },
+      { name: "href=\"mailto:\"", desc: "Open email client" }
+    ],
+    theory: `The <code>&lt;a&gt;</code> (anchor) tag creates clickable links. The <code>href</code> attribute tells the browser where to go. Add <code>target="_blank"</code> to open in a new tab. You can also link to sections on the same page using <code>#id</code>, or create email links with <code>mailto:</code>.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Links</title></head>
+<body>
+  <h1 id="top">Links & Navigation</h1>
+
+  <p>Visit <a href="https://www.wikipedia.org" target="_blank">Wikipedia</a>.</p>
+
+  <p>Jump to <a href="#section2">Section 2</a> below.</p>
+
+  <p>Email me: <a href="mailto:hello@example.com">hello@example.com</a></p>
+
+  <br><br><br><br><br><br><br><br><br><br>
+
+  <h2 id="section2">Section 2</h2>
+  <p>You jumped here! <a href="#top">Back to top</a></p>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Create a mini navigation with 3 links that jump to 3 different sections on the same page.</li>
+<li>Add an external link that opens in a new tab.</li>
+<li>Add a "mailto:" link with your email address.</li>
+</ol>`,
+    quiz: {
+      question: "What attribute makes a link open in a new tab?",
+      options: ["href=\"new\"", "target=\"_blank\"", "open=\"tab\"", "new-tab=\"true\""],
+      correct: 1,
+      explanation: "<code>target=\"_blank\"</code> tells the browser to open the link in a new tab."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 5,
+    title: "Images",
+    desc: "Add images to your pages with proper alt text and sizing.",
+    tags: [
+      { name: "&lt;img src&gt;", desc: "Embeds an image" },
+      { name: "alt=\"...\"", desc: "Describes the image for accessibility" },
+      { name: "width / height", desc: "Set dimensions in pixels" },
+      { name: "&lt;figure&gt;", desc: "Wraps image + caption" },
+      { name: "&lt;figcaption&gt;", desc: "Caption for figure" }
+    ],
+    theory: `The <code>&lt;img&gt;</code> tag is <strong>self-closing</strong> — it doesn't need a closing tag. The <code>src</code> attribute points to the image file (a URL or file path), and the <code>alt</code> attribute provides descriptive text for screen readers and when the image fails to load. <strong>Always include alt text!</strong> Use <code>&lt;figure&gt;</code> and <code>&lt;figcaption&gt;</code> to add a caption below an image.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Images</title></head>
+<body>
+  <h1>Working with Images</h1>
+
+  <img src="https://picsum.photos/400/250"
+       alt="A random beautiful photo"
+       width="400" height="250">
+
+  <br><br>
+
+  <figure>
+    <img src="https://picsum.photos/400/300"
+         alt="Another random photo"
+         width="400">
+    <figcaption>A captioned image using figure.</figcaption>
+  </figure>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Add two images using <code>&lt;img&gt;</code> with different sizes.</li>
+<li>Make sure both have descriptive <code>alt</code> attributes.</li>
+<li>Wrap one image in a <code>&lt;figure&gt;</code> with a <code>&lt;figcaption&gt;</code>.</li>
+</ol>`,
+    quiz: {
+      question: "Why is the alt attribute important?",
+      options: ["It makes images load faster", "It provides text for screen readers and broken images", "It's purely decorative", "It sets the image title in the tab"],
+      correct: 1,
+      explanation: "The <code>alt</code> attribute is essential for accessibility and acts as a fallback when images don't load."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 6,
+    title: "Lists",
+    desc: "Organize content with ordered, unordered, and description lists.",
+    tags: [
+      { name: "&lt;ul&gt;", desc: "Unordered (bullet) list" },
+      { name: "&lt;ol&gt;", desc: "Ordered (numbered) list" },
+      { name: "&lt;li&gt;", desc: "A list item" },
+      { name: "&lt;dl&gt;", desc: "Description list" },
+      { name: "&lt;dt&gt; / &lt;dd&gt;", desc: "Term / definition" }
+    ],
+    theory: `Use <code>&lt;ul&gt;</code> for bulleted lists and <code>&lt;ol&gt;</code> for numbered lists. Both use <code>&lt;li&gt;</code> for each item. You can <strong>nest lists</strong> inside each other. The <code>&lt;dl&gt;</code> (description list) pairs <code>&lt;dt&gt;</code> terms with <code>&lt;dd&gt;</code> definitions — great for glossaries.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Lists</title></head>
+<body>
+  <h1>Types of Lists</h1>
+
+  <h2>Shopping List (unordered)</h2>
+  <ul>
+    <li>Milk</li>
+    <li>Eggs</li>
+    <li>Bread</li>
+  </ul>
+
+  <h2>Top 3 Movies (ordered)</h2>
+  <ol>
+    <li>The Shawshank Redemption</li>
+    <li>The Godfather</li>
+    <li>The Dark Knight</li>
+  </ol>
+
+  <h2>Nested List</h2>
+  <ul>
+    <li>Fruits
+      <ul>
+        <li>Apple</li>
+        <li>Banana</li>
+      </ul>
+    </li>
+    <li>Vegetables
+      <ul>
+        <li>Carrot</li>
+        <li>Broccoli</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>Glossary (description list)</h2>
+  <dl>
+    <dt>HTML</dt>
+    <dd>HyperText Markup Language</dd>
+    <dt>CSS</dt>
+    <dd>Cascading Style Sheets</dd>
+  </dl>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Create an ordered list of your top 5 favorite foods.</li>
+<li>Create a nested unordered list with at least 2 levels of depth.</li>
+<li>Create a description list with 3 terms and their definitions.</li>
+</ol>`,
+    quiz: {
+      question: "Which tag is used for each item inside &lt;ul&gt; or &lt;ol&gt;?",
+      options: ["&lt;item&gt;", "&lt;li&gt;", "&lt;dd&gt;", "&lt;entry&gt;"],
+      correct: 1,
+      explanation: "<code>&lt;li&gt;</code> (list item) is the correct tag for items inside both ordered and unordered lists."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 7,
+    title: "Tables",
+    desc: "Display data in rows and columns with proper table structure.",
+    tags: [
+      { name: "&lt;table&gt;", desc: "The table container" },
+      { name: "&lt;thead&gt; / &lt;tbody&gt;", desc: "Header / body sections" },
+      { name: "&lt;tr&gt;", desc: "A table row" },
+      { name: "&lt;th&gt;", desc: "Header cell (bold, centered)" },
+      { name: "&lt;td&gt;", desc: "Data cell" },
+      { name: "colspan / rowspan", desc: "Merge cells across columns/rows" }
+    ],
+    theory: `Tables organize data into rows and columns. Use <code>&lt;thead&gt;</code> for the header row (with <code>&lt;th&gt;</code> cells) and <code>&lt;tbody&gt;</code> for data rows (with <code>&lt;td&gt;</code> cells). The <code>colspan</code> attribute lets a cell span multiple columns, and <code>rowspan</code> lets it span multiple rows.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Tables</title></head>
+<body>
+  <h1>Student Grades</h1>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Math</th>
+        <th>Science</th>
+        <th>English</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Alice</td>
+        <td>95</td>
+        <td>88</td>
+        <td>92</td>
+      </tr>
+      <tr>
+        <td>Bob</td>
+        <td>78</td>
+        <td>85</td>
+        <td>90</td>
+      </tr>
+      <tr>
+        <td colspan="4"><strong>All students passed!</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Create a table with your weekly schedule (days as columns, time slots as rows).</li>
+<li>Use <code>colspan</code> to merge cells for a lunch break that spans all columns.</li>
+<li>Use <code>&lt;thead&gt;</code> and <code>&lt;tbody&gt;</code> properly.</li>
+</ol>`,
+    quiz: {
+      question: "What does colspan=\"3\" do?",
+      options: ["Creates 3 columns", "Makes a cell span 3 columns", "Makes 3 rows", "Sets column width to 3px"],
+      correct: 1,
+      explanation: "<code>colspan=\"3\"</code> makes a single cell stretch across 3 columns."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 8,
+    title: "Forms & Input",
+    desc: "Build interactive forms with text fields, buttons, checkboxes, and more.",
+    tags: [
+      { name: "&lt;form&gt;", desc: "Form container" },
+      { name: "&lt;input&gt;", desc: "Text, email, password, etc." },
+      { name: "&lt;textarea&gt;", desc: "Multi-line text input" },
+      { name: "&lt;select&gt; / &lt;option&gt;", desc: "Dropdown menu" },
+      { name: "&lt;button&gt;", desc: "Clickable button" },
+      { name: "&lt;label&gt;", desc: "Labels an input (accessibility)" }
+    ],
+    theory: `Forms collect user input. The <code>&lt;form&gt;</code> element wraps all inputs. Always pair inputs with <code>&lt;label&gt;</code> using the <code>for</code> attribute — this is critical for accessibility. The <code>&lt;input&gt;</code> tag's <code>type</code> attribute changes what it does: <code>text</code>, <code>email</code>, <code>password</code>, <code>checkbox</code>, <code>radio</code>, <code>number</code>, <code>date</code>, and more.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Forms</title></head>
+<body>
+  <h1>Registration Form</h1>
+
+  <form>
+    <label for="name">Full Name:</label><br>
+    <input type="text" id="name" placeholder="Enter your name" required>
+    <br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" placeholder="you@example.com" required>
+    <br><br>
+
+    <label for="pass">Password:</label><br>
+    <input type="password" id="pass" minlength="8" required>
+    <br><br>
+
+    <label>Gender:</label><br>
+    <input type="radio" id="male" name="gender" value="male">
+    <label for="male">Male</label>
+    <input type="radio" id="female" name="gender" value="female">
+    <label for="female">Female</label>
+    <br><br>
+
+    <label for="country">Country:</label><br>
+    <select id="country">
+      <option value="">-- Select --</option>
+      <option value="us">United States</option>
+      <option value="uk">United Kingdom</option>
+      <option value="bd">Bangladesh</option>
+    </select>
+    <br><br>
+
+    <label for="bio">Bio:</label><br>
+    <textarea id="bio" rows="4" cols="40" placeholder="Tell us about yourself..."></textarea>
+    <br><br>
+
+    <input type="checkbox" id="terms">
+    <label for="terms">I agree to the terms</label>
+    <br><br>
+
+    <button type="submit">Register</button>
+  </form>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Add a <code>date</code> input for "Date of Birth".</li>
+<li>Add a <code>number</code> input for "Age" with min=13 and max=120.</li>
+<li>Add a <code>color</code> input to let users pick their favorite color.</li>
+<li>Make sure every input has a proper <code>&lt;label&gt;</code>.</li>
+</ol>`,
+    quiz: {
+      question: "Why should every &lt;input&gt; have a &lt;label&gt;?",
+      options: ["It makes the form look nicer", "It's required or the form won't submit", "It helps screen readers and clicking the label focuses the input", "It's optional and decorative"],
+      correct: 2,
+      explanation: "Labels are essential for accessibility — screen readers announce them, and clicking a label focuses its associated input."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 9,
+    title: "Semantic HTML",
+    desc: "Use meaningful tags that describe your content's structure and purpose.",
+    tags: [
+      { name: "&lt;header&gt;", desc: "Top section / site header" },
+      { name: "&lt;nav&gt;", desc: "Navigation links" },
+      { name: "&lt;main&gt;", desc: "Primary page content" },
+      { name: "&lt;article&gt;", desc: "Self-contained content" },
+      { name: "&lt;section&gt;", desc: "Thematic grouping" },
+      { name: "&lt;aside&gt;", desc: "Sidebar / related info" },
+      { name: "&lt;footer&gt;", desc: "Bottom section / credits" }
+    ],
+    theory: `Semantic tags don't change how things look — they describe what things <strong>are</strong>. Using <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code>, and <code>&lt;footer&gt;</code> instead of generic <code>&lt;div&gt;</code>s helps screen readers navigate your page, improves SEO, and makes your code more readable.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Semantic HTML</title></head>
+<body>
+
+  <header>
+    <h1>My Blog</h1>
+    <nav>
+      <a href="#home">Home</a> |
+      <a href="#about">About</a> |
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h2>My First Blog Post</h2>
+      <p>Published on <time datetime="2025-01-15">January 15, 2025</time></p>
+      <p>This is the body of my blog post. It's self-contained content.</p>
+    </article>
+
+    <section>
+      <h2>Comments</h2>
+      <p>No comments yet. Be the first!</p>
+    </section>
+  </main>
+
+  <aside>
+    <h3>About the Author</h3>
+    <p>I'm learning HTML and loving it!</p>
+  </aside>
+
+  <footer>
+    <p>&copy; 2025 My Blog. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Build a blog page layout using only semantic tags (no <code>&lt;div&gt;</code>).</li>
+<li>Include: <code>&lt;header&gt;</code> with <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code> with two <code>&lt;article&gt;</code>s, an <code>&lt;aside&gt;</code>, and a <code>&lt;footer&gt;</code>.</li>
+<li>Use <code>&lt;time&gt;</code> for dates.</li>
+</ol>`,
+    quiz: {
+      question: "What is the benefit of using &lt;article&gt; instead of &lt;div&gt;?",
+      options: ["It looks different visually", "It has semantic meaning — screen readers and search engines understand it's self-contained content", "It loads faster", "There's no difference"],
+      correct: 1,
+      explanation: "Semantic tags like <code>&lt;article&gt;</code> tell machines what the content IS, not just how it looks."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 10,
+    title: "Media: Audio & Video",
+    desc: "Embed audio and video directly into your web pages.",
+    tags: [
+      { name: "&lt;video&gt;", desc: "Embeds a video player" },
+      { name: "&lt;audio&gt;", desc: "Embeds an audio player" },
+      { name: "&lt;source&gt;", desc: "Specifies media source file" },
+      { name: "controls", desc: "Shows play/pause controls" },
+      { name: "autoplay / loop", desc: "Auto-play and looping" }
+    ],
+    theory: `HTML5 lets you embed media natively — no plugins needed. The <code>&lt;video&gt;</code> and <code>&lt;audio&gt;</code> tags accept <code>controls</code> (shows player UI), <code>autoplay</code>, <code>loop</code>, and <code>muted</code> attributes. Use <code>&lt;source&gt;</code> inside them to provide multiple file formats for browser compatibility. Always include fallback text between the tags.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Media</title></head>
+<body>
+  <h1>Audio & Video</h1>
+
+  <h2>Video Player</h2>
+  <video width="400" controls>
+    <source src="https://www.w3schools.com/html/mov_bbb.mp4"
+            type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <h2>Audio Player</h2>
+  <audio controls>
+    <source src="https://www.w3schools.com/html/horse.mp3"
+            type="audio/mpeg">
+    Your browser does not support the audio tag.
+  </audio>
+
+  <h2>YouTube Embed (iframe)</h2>
+  <iframe width="400" height="225"
+    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+    title="YouTube video"
+    allowfullscreen>
+  </iframe>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Add a video with <code>controls</code> and a <code>poster</code> image (shown before play).</li>
+<li>Add an audio element with <code>loop</code> enabled.</li>
+<li>Embed a YouTube video using <code>&lt;iframe&gt;</code>.</li>
+</ol>`,
+    quiz: {
+      question: "What does the 'controls' attribute do on &lt;video&gt;?",
+      options: ["Restricts who can watch", "Shows play/pause/volume UI controls", "Makes the video full-screen", "Controls the video quality"],
+      correct: 1,
+      explanation: "The <code>controls</code> attribute displays the built-in play, pause, volume, and seek controls."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 11,
+    title: "Divs, Spans & Attributes",
+    desc: "Master generic containers and HTML attributes like id, class, style, and data-*.",
+    tags: [
+      { name: "&lt;div&gt;", desc: "Block-level container" },
+      { name: "&lt;span&gt;", desc: "Inline container" },
+      { name: "id", desc: "Unique identifier for an element" },
+      { name: "class", desc: "Reusable group identifier" },
+      { name: "style", desc: "Inline CSS styles" },
+      { name: "data-*", desc: "Custom data attributes" }
+    ],
+    theory: `<code>&lt;div&gt;</code> is a block-level container (takes full width, starts a new line). <code>&lt;span&gt;</code> is inline (wraps text without breaking the line). While semantic tags are preferred, divs and spans are useful for grouping and styling. <strong>Attributes</strong> add extra information: <code>id</code> is unique, <code>class</code> can be shared, <code>style</code> adds inline CSS, and <code>data-*</code> stores custom data.`,
+    starterCode: `<!DOCTYPE html>
+<html>
+<head><title>Divs & Attributes</title></head>
+<body>
+  <h1>Containers & Attributes</h1>
+
+  <div id="card-1" class="card" style="border: 2px solid blue; padding: 16px; margin: 10px 0;">
+    <h2>Card One</h2>
+    <p>This div has an <span style="color: red; font-weight: bold;">id</span>,
+       a <span style="color: green; font-weight: bold;">class</span>,
+       and inline <span style="color: blue; font-weight: bold;">styles</span>.</p>
+  </div>
+
+  <div id="card-2" class="card" data-category="tech" style="border: 2px solid green; padding: 16px; margin: 10px 0;">
+    <h2>Card Two</h2>
+    <p>This card has a <code>data-category="tech"</code> custom attribute.</p>
+  </div>
+
+  <p>Inline containers: I love <span style="background: yellow;">highlighted text</span> inside paragraphs.</p>
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Create 3 "card" divs each with a unique <code>id</code> and the same <code>class="card"</code>.</li>
+<li>Add <code>data-*</code> attributes to store custom info (e.g., <code>data-price="29.99"</code>).</li>
+<li>Use <code>&lt;span&gt;</code> to color individual words inside a paragraph.</li>
+</ol>`,
+    quiz: {
+      question: "What's the difference between &lt;div&gt; and &lt;span&gt;?",
+      options: ["div is for text, span is for images", "div is block-level (full width), span is inline (flows with text)", "They're the same", "span is semantic, div is not"],
+      correct: 1,
+      explanation: "<code>&lt;div&gt;</code> creates a block (new line, full width). <code>&lt;span&gt;</code> stays inline with surrounding text."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  },
+  {
+    id: 12,
+    title: "Putting It All Together",
+    desc: "Build a complete multi-section web page using everything you've learned.",
+    tags: [
+      { name: "All tags", desc: "Use every concept from lessons 1–11" }
+    ],
+    theory: `You've learned the full foundation of HTML! Now it's time to combine everything into a <strong>real, complete web page</strong>. A professional page uses: proper document structure, semantic tags, headings, paragraphs, links, images, lists, tables, forms, and media. This final exercise is your graduation project.`,
+    starterCode: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+</head>
+<body>
+
+  <header>
+    <h1>Your Name — Portfolio</h1>
+    <nav>
+      <a href="#about">About</a> |
+      <a href="#skills">Skills</a> |
+      <a href="#projects">Projects</a> |
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>About Me</h2>
+      <figure>
+        <img src="https://picsum.photos/200/200" alt="Profile photo" width="200">
+        <figcaption>That's me!</figcaption>
+      </figure>
+      <p>I'm a <strong>web developer</strong> learning <em>HTML</em> from scratch. I love building things for the web.</p>
+    </section>
+
+    <hr>
+
+    <section id="skills">
+      <h2>My Skills</h2>
+      <ul>
+        <li>HTML5</li>
+        <li>Problem Solving</li>
+        <li>Creativity</li>
+      </ul>
+    </section>
+
+    <hr>
+
+    <section id="projects">
+      <h2>Projects</h2>
+      <table border="1" cellpadding="8">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Portfolio Page</td>
+            <td>This very page!</td>
+            <td><mark>Complete</mark></td>
+          </tr>
+          <tr>
+            <td>Blog</td>
+            <td>A personal blog</td>
+            <td><em>In Progress</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr>
+
+    <section id="contact">
+      <h2>Contact Me</h2>
+      <form>
+        <label for="c-name">Name:</label><br>
+        <input type="text" id="c-name" required><br><br>
+
+        <label for="c-email">Email:</label><br>
+        <input type="email" id="c-email" required><br><br>
+
+        <label for="c-msg">Message:</label><br>
+        <textarea id="c-msg" rows="4" cols="40"></textarea><br><br>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Your Name. Built with <strong>pure HTML</strong>.</p>
+    <p><a href="#top">Back to Top</a></p>
+  </footer>
+
+</body>
+</html>`,
+    challenge: `<ol>
+<li>Customize this portfolio with your real information.</li>
+<li>Add an <code>&lt;audio&gt;</code> or <code>&lt;video&gt;</code> section.</li>
+<li>Add a "Favorites" section with a description list (<code>&lt;dl&gt;</code>).</li>
+<li>Make sure you use <strong>zero</strong> <code>&lt;div&gt;</code> tags — only semantic HTML!</li>
+<li>Open it in a browser and admire your work! 🎉</li>
+</ol>`,
+    quiz: {
+      question: "Which of these is the correct order for a well-structured HTML page?",
+      options: [
+        "body → head → html → DOCTYPE",
+        "DOCTYPE → html → head → body",
+        "html → DOCTYPE → body → head",
+        "head → body → html → DOCTYPE"
+      ],
+      correct: 1,
+      explanation: "The correct order is: <code>&lt;!DOCTYPE html&gt;</code> → <code>&lt;html&gt;</code> → <code>&lt;head&gt;</code> → <code>&lt;body&gt;</code>."
+    },
+    codepen: "https://codepen.io/pen/?template=VwOebbQ"
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentLesson = 0;
+let completedLessons = new Set();
+
+// Load progress from localStorage
+try {
+  const saved = localStorage.getItem('html-course-progress');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    completedLessons = new Set(parsed.completed || []);
+    currentLesson = parsed.current || 0;
+  }
+} catch(e) {}
+
+function saveProgress() {
+  try {
+    localStorage.setItem('html-course-progress', JSON.stringify({
+      completed: [...completedLessons],
+      current: currentLesson
+    }));
+  } catch(e) {}
+}
+
+// ============================================================
+// RENDER SIDEBAR
+// ============================================================
+function renderSidebar() {
+  const list = document.getElementById('lessonList');
+  list.innerHTML = lessons.map((lesson, i) => {
+    const isActive = i === currentLesson;
+    const isCompleted = completedLessons.has(i);
+    return `
+      <li class="lesson-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}"
+          onclick="goToLesson(${i})" id="sidebar-lesson-${i}">
+        <span class="lesson-num">${isCompleted ? '✓' : lesson.id}</span>
+        <span>${lesson.title}</span>
+      </li>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// RENDER LESSON
+// ============================================================
+function renderLesson() {
+  const lesson = lessons[currentLesson];
+  const main = document.getElementById('mainContent');
+
+  main.innerHTML = `
+    <div class="lesson-view">
+      <div class="lesson-header">
+        <div class="lesson-badge">📘 Lesson ${lesson.id} of ${lessons.length}</div>
+        <h1 class="lesson-title">${lesson.title}</h1>
+        <p class="lesson-desc">${lesson.desc}</p>
+      </div>
+
+      <!-- THEORY -->
+      <div class="content-section">
+        <h2 class="section-title"><span class="icon">📖</span> Concept</h2>
+        <p class="theory-text">${lesson.theory}</p>
+
+        <div class="tip-box">
+          <strong>💡 Tags in this lesson:</strong>
+        </div>
+        <div class="tag-grid">
+          ${lesson.tags.map(t => `
+            <div class="tag-card">
+              <div class="tag-card-name">${t.name}</div>
+              <div class="tag-card-desc">${t.desc}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <!-- LIVE PLAYGROUND -->
+      <div class="content-section">
+        <h2 class="section-title"><span class="icon">⚡</span> Live Playground</h2>
+        <p class="theory-text">Edit the code on the left and see the result instantly on the right.</p>
+        <div class="code-playground">
+          <div class="playground-tabs">
+            <div class="playground-tab active">HTML</div>
+            <div class="playground-tab" style="margin-left:auto; color: var(--text-muted); cursor: default; font-size: 0.7rem;">LIVE PREVIEW →</div>
+          </div>
+          <div class="playground-body">
+            <div class="code-editor-area">
+              <textarea id="codeEditor"
+                spellcheck="false"
+                placeholder="Type your HTML here...">${escapeHtml(lesson.starterCode)}</textarea>
+            </div>
+            <div class="preview-pane">
+              <div class="preview-label">Preview</div>
+              <iframe id="previewFrame"></iframe>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button class="btn btn-secondary" onclick="resetCode()">↺ Reset Code</button>
+          <a class="btn btn-codepen" href="${lesson.codepen}" target="_blank" rel="noopener">
+            ✏️ Practice on CodePen
+          </a>
+        </div>
+      </div>
+
+      <!-- CHALLENGE -->
+      <div class="content-section">
+        <div class="challenge-box">
+          <div class="challenge-title">🏆 Challenge</div>
+          <div class="challenge-text">${lesson.challenge}</div>
+          <p class="theory-text" style="font-size: 0.82rem; margin-top: 0.5rem; color: var(--text-muted);">Try completing the challenge in the playground above, or open it in CodePen!</p>
+        </div>
+      </div>
+
+      <!-- QUIZ -->
+      <div class="content-section">
+        <h2 class="section-title"><span class="icon">🧠</span> Quick Quiz</h2>
+        <div class="quiz-container">
+          <div class="quiz-question">${lesson.quiz.question}</div>
+          <div class="quiz-options" id="quizOptions">
+            ${lesson.quiz.options.map((opt, i) => `
+              <div class="quiz-option" onclick="answerQuiz(${i}, ${lesson.quiz.correct})" id="quiz-opt-${i}">
+                <span class="radio"></span>
+                <span>${opt}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+      </div>
+
+      <!-- NAV -->
+      <div class="lesson-nav">
+        ${currentLesson > 0
+          ? `<button class="btn btn-secondary" onclick="goToLesson(${currentLesson - 1})">← Previous</button>`
+          : `<div></div>`
+        }
+        <button class="btn btn-success" onclick="markComplete()" id="completeBtn">
+          ${completedLessons.has(currentLesson) ? '✓ Completed' : '✓ Mark Complete'}
+        </button>
+        ${currentLesson < lessons.length - 1
+          ? `<button class="btn btn-primary" onclick="goToLesson(${currentLesson + 1})">Next →</button>`
+          : `<div></div>`
+        }
+      </div>
+    </div>
+  `;
+
+  // Wire up live preview
+  const editor = document.getElementById('codeEditor');
+  const frame = document.getElementById('previewFrame');
+
+  function updatePreview() {
+    frame.srcdoc = editor.value;
+  }
+
+  editor.addEventListener('input', updatePreview);
+  updatePreview();
+
+  // Handle tab key in editor
+  editor.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const start = this.selectionStart;
+      const end = this.selectionEnd;
+      this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+      this.selectionStart = this.selectionEnd = start + 2;
+      updatePreview();
+    }
+  });
+
+  // Scroll to top
+  main.scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function goToLesson(index) {
+  currentLesson = index;
+  saveProgress();
+  renderSidebar();
+  renderLesson();
+  updateProgress();
+}
+
+function markComplete() {
+  completedLessons.add(currentLesson);
+  saveProgress();
+  renderSidebar();
+  updateProgress();
+  const btn = document.getElementById('completeBtn');
+  if (btn) {
+    btn.textContent = '✓ Completed';
+    btn.classList.add('completing');
+  }
+}
+
+function resetCode() {
+  const editor = document.getElementById('codeEditor');
+  const frame = document.getElementById('previewFrame');
+  editor.value = lessons[currentLesson].starterCode;
+  frame.srcdoc = editor.value;
+}
+
+function answerQuiz(selected, correct) {
+  const options = document.querySelectorAll('.quiz-option');
+  const feedback = document.getElementById('quizFeedback');
+
+  // Reset
+  options.forEach(o => { o.classList.remove('correct', 'wrong'); o.style.pointerEvents = 'none'; });
+
+  if (selected === correct) {
+    options[selected].classList.add('correct');
+    feedback.className = 'quiz-feedback show correct-feedback';
+    feedback.innerHTML = '✅ Correct! ' + lessons[currentLesson].quiz.explanation;
+  } else {
+    options[selected].classList.add('wrong');
+    options[correct].classList.add('correct');
+    feedback.className = 'quiz-feedback show wrong-feedback';
+    feedback.innerHTML = '❌ Not quite. ' + lessons[currentLesson].quiz.explanation;
+  }
+}
+
+function updateProgress() {
+  const total = lessons.length;
+  const done = completedLessons.size;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${done} / ${total} lessons`;
+}
+
+function escapeHtml(str) {
+  // We need to NOT escape for textarea value
+  return str;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderSidebar();
+renderLesson();
+updateProgress();
+</script>
+
+</body>
+</html>
